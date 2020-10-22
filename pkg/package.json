@@ -1,0 +1,15 @@
+{
+  "name": "array-rotate-rs",
+  "collaborators": [
+    "bgoodman <b@thebgoodman.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "array_rotate_rs_bg.wasm",
+    "array_rotate_rs.js",
+    "array_rotate_rs.d.ts"
+  ],
+  "module": "array_rotate_rs.js",
+  "types": "array_rotate_rs.d.ts",
+  "sideEffects": false
+}

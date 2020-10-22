@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Wasm Project</title>
+  </head>
+
+  <body>
+
+    <script type="module">
+      // Importing WASM as a JS module requires us to call an init function provided by the default export.
+      // This is planned to be changed in the future.
+      import { default as wasm, rotate_left_2d, rotate_right } from "./pkg/array_rotate_rs.js"
+
+      const rotRight2D = (a) => {
+        // mxn -> nxm array
+        const m = a.length; //rows
+        const n = a[0].length; //columns
+        const newArray = new Array(n);
+
+        for (let i = 0; i < n; i++) {
+          let newRow = new Array(m);
+          for (let k = 0; k < m; k++ ) {
+            newRow[k] = a[m-1-k][i]
+          }
+          newArray[i] = newRow;
+        };
+        return newArray;
+      }
+
+
+      wasm().then((module) => {
+        // console.log('rotate_left_2d', rotate_left_2d( [[1,2,3], [4,5,6], [7,8,9]] ))
+
+        console.log('Building test array')
+        let megaArray = new Array();
+        for (let i = 0; i < 100; i++) {
+          megaArray.push([...Array(100).keys()])
+        }
+
+        console.log('Beginning wasm module test.')
+        console.time('test_wasm');
+        console.log('rotate right 100000', rotate_right(megaArray, 100000))
+        console.timeEnd('test_wasm');
+
+
+        let rot = megaArray;
+        console.log('Beginning js test.')
+        console.time('test_js');
+        for (let i = 0; i < 100000; i++) {
+          rot = rotRight2D(rot)
+        }
+        console.timeEnd('test_js');
+        console.log('rotate right 100000', rot)
+
+        // 100x100 array - 100000 rotations
+        // test_wasm: 8497.4609375 ms
+        // test_js: 2469.39013671875 ms
+
+      });
+    </script>
+
+
+  </body>
+</html>
